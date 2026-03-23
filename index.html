@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evalueringsdashboard — Videocation</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F7F7;--surface:#FFFFFF;--s2:#EDEDED;--s3:#C2C2C2;
+  --dark:#4D4554;--text:#333333;--tm:#7A7A7A;--tf:#ABABAB;
+  --accent:#FFE880;--pos:#3B6D11;--pos-bg:#EAF3DE;--neg:#993C1D;--neg-bg:#FAECE7;
+  --border:rgba(0,0,0,0.08);--bs:rgba(0,0,0,0.13);--r:10px;--rl:14px;
+  --font:'Montserrat',sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5}
+.wrap{display:grid;grid-template-rows:54px 1fr;height:100vh;overflow:hidden}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--dark);flex-shrink:0}
+.tl{display:flex;align-items:center;gap:12px}
+.bm{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.bm svg{width:14px;height:14px}
+.at{font-size:13px;font-weight:600;color:#fff;letter-spacing:.1px}
+.as{font-size:11px;font-weight:400;color:rgba(255,255,255,.4);margin-left:2px}
+.topbar-title{font-size:12px;font-weight:600;color:var(--accent);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:none}
+.dots{display:flex;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .3s}
+.dot.active{background:var(--accent)}
+.dot.done{background:rgba(255,255,255,.5)}
+
+.main{overflow-y:auto;padding:24px 20px 48px}
+
+/* UPLOAD */
+.sh{font-size:18px;font-weight:700;margin-bottom:5px;letter-spacing:-.3px}
+.ss{font-size:13px;color:var(--tm);margin-bottom:22px;line-height:1.55}
+
+/* NAME FIELD */
+.nf{margin-bottom:18px}
+.nfl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);margin-bottom:7px;display:block}
+.nfi{width:100%;padding:10px 14px;background:var(--surface);border:1.5px solid var(--bs);border-radius:var(--r);font-family:var(--font);font-size:13px;font-weight:500;color:var(--text);transition:border-color .2s,box-shadow .2s;outline:none}
+.nfi::placeholder{color:var(--tf)}
+.nfi:focus{border-color:var(--dark);box-shadow:0 0 0 3px rgba(77,69,84,.07)}
+
+.upair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.uc{background:var(--surface);border:1.5px dashed var(--bs);border-radius:var(--rl);padding:18px 14px;cursor:pointer;transition:border-color .2s,background .2s,transform .15s;position:relative;text-align:center}
+.uc:hover{border-color:var(--dark);transform:translateY(-1px)}
+.uc.loaded{border-style:solid;border-color:var(--dark);background:#ECEAEE}
+.uc input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ui{width:30px;height:30px;border-radius:7px;background:var(--s2);display:flex;align-items:center;justify-content:center;margin:0 auto 9px}
+.ui svg{width:15px;height:15px;opacity:.4}
+.uc.loaded .ui{background:var(--accent)}
+.uc.loaded .ui svg{opacity:.7}
+.ubadge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+.ubadge.pre{background:var(--s2);color:var(--tm)}
+.ubadge.post{background:var(--dark);color:#fff}
+.uc.loaded .ubadge{background:var(--accent);color:var(--text)}
+.un{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.um{font-size:11px;color:var(--tf)}
+.uc.loaded .un{color:var(--dark)}
+
+/* MAPPING */
+.msec{margin-bottom:16px}
+.ml{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ml .tag{background:var(--s2);padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;color:var(--tm)}
+
+.mr{display:grid;grid-template-columns:1fr 20px 1fr 28px;align-items:center;gap:6px;margin-bottom:8px}
+.mr select,.mpr select{font-family:var(--font);font-size:11px;padding:7px 10px;background:var(--surface);border:1px solid var(--bs);border-radius:var(--r);color:var(--text);width:100%;cursor:pointer;appearance:none;-webkit-appearance:none}
+.mr select:focus,.mpr select:focus{outline:none;border-color:var(--dark)}
+.ai{text-align:center;font-size:12px;color:var(--tf)}
+
+.mpr{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.pbl{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--dark);color:#fff;white-space:nowrap;flex-shrink:0}
+
+.del-btn{width:24px;height:24px;flex-shrink:0;background:none;border:1px solid var(--bs);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tm);font-size:14px;line-height:1;transition:background .15s,color .15s;font-family:var(--font)}
+.del-btn:hover{background:var(--neg-bg);color:var(--neg);border-color:var(--neg)}
+
+.apb,.apgb{font-size:11px;font-weight:500;color:var(--tm);background:none;border:1px dashed var(--bs);border-radius:var(--r);padding:7px 12px;cursor:pointer;margin-top:2px;transition:background .15s;font-family:var(--font);width:100%;text-align:left}
+.apb:hover,.apgb:hover{background:var(--s2)}
+
+.fn{background:var(--s2);border-radius:var(--r);padding:11px 13px;font-size:11px;color:var(--tm);line-height:1.6;margin-bottom:18px;border-left:3px solid var(--s3)}
+.fn strong{color:var(--text);font-weight:600}
+
+.bp{width:100%;padding:13px;background:var(--accent);color:var(--text);border:none;border-radius:20px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;transition:opacity .15s,transform .1s}
+.bp:hover:not(:disabled){opacity:.88;transform:translateY(-1px)}
+.bp:disabled{opacity:.3;cursor:not-allowed}
+.bg{width:100%;padding:11px;background:transparent;color:var(--tm);border:1px solid var(--bs);border-radius:20px;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;transition:background .15s}
+.bg:hover{background:var(--s2)}
+
+/* DASHBOARD */
+.ds{display:none}
+.ds.visible{display:block}
+.dtr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.dh{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.dsubt{font-size:12px;color:var(--tm);font-weight:500;margin-bottom:16px}
+.rb{font-size:11px;font-weight:600;color:var(--tm);background:none;border:1px solid var(--bs);border-radius:20px;padding:5px 12px;cursor:pointer;font-family:var(--font);transition:background .15s}
+.rb:hover{background:var(--s2)}
+
+.mrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.mt{background:var(--dark);border-radius:var(--r);padding:13px 13px 12px}
+.mlb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.45);margin-bottom:5px}
+.mv{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.5px}
+.mv.pos{color:var(--accent)}
+.mv.neg{color:#F0997B}
+
+.sdiv{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);margin:20px 0 14px}
+.sdiv::before,.sdiv::after{content:'';flex:1;height:1px;background:var(--border)}
+.sdiv.prog{color:var(--dark)}
+.sdiv.prog::before,.sdiv.prog::after{background:var(--s3)}
+
+.cc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 16px 12px;margin-bottom:14px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ct{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm)}
+.li{display:flex;gap:10px}
+.lii{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--tm);font-weight:500}
+.lsq{width:9px;height:9px;border-radius:2px}
+.cw{position:relative;width:100%}
+
+/* Q ITEMS */
+.ql{display:flex;flex-direction:column;gap:8px;margin-bottom:6px}
+.qi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .15s}
+.qi:hover{border-color:var(--s3)}
+.qi-main{padding:12px 14px}
+.qt{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px}
+.qn{font-size:9px;font-weight:700;letter-spacing:.5px;color:#fff;background:var(--dark);padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:2px;text-transform:uppercase}
+.qn.prog{background:var(--dark)}
+.qtx{font-size:12px;font-weight:600;color:var(--text);line-height:1.4;flex:1}
+.qs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.sb{font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px}
+.sb.pre{background:#FFF5B8;color:#8A7820;border:1px solid #FFE880}
+.sb.post{background:#FFE880;color:#5A4A00}
+.sb.po{background:var(--accent);color:var(--text)}
+.cc2{font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px}
+.cc2.pos{background:var(--pos-bg);color:var(--pos)}
+.cc2.neg{background:var(--neg-bg);color:var(--neg)}
+.cc2.neu{background:var(--s2);color:var(--tm)}
+.qb{height:4px;background:var(--s2);border-radius:2px;position:relative;overflow:hidden;margin-top:2px}
+.qbpre{position:absolute;height:100%;top:0;left:0;background:var(--s3);border-radius:2px}
+.qbpost{position:absolute;height:100%;top:0;left:0;background:var(--dark);border-radius:2px;opacity:.7}
+.qbprog{position:absolute;height:100%;top:0;left:0;background:var(--accent);border-radius:2px}
+
+.expand-btn{display:none}
+.dist-panel{display:block;padding:12px 14px 14px;border-top:1px solid var(--border);background:var(--bg)}
+.dist-wrap{position:relative;width:100%;height:120px!important}
+
+/* PROGRAM TILES */
+.ps{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.pt{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 13px}
+.ptq{font-size:11px;font-weight:500;color:var(--tm);margin-bottom:6px;line-height:1.3}
+.ptv{font-size:20px;font-weight:700;color:var(--dark);letter-spacing:-.5px}
+.pts{font-size:10px;color:var(--tf);margin-top:1px;font-weight:500}
+.ptb{height:3px;background:var(--s2);border-radius:2px;margin-top:8px}
+.ptbf{height:100%;background:var(--accent);border-radius:2px}
+
+.upload-screen{animation:fu .3s ease}
+.ds.visible{animation:fu .35s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* PDF EXPORT */
+.pdf-btn{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--tm);background:none;border:1px solid var(--bs);border-radius:20px;padding:5px 12px;cursor:pointer;font-family:var(--font);transition:background .15s,color .15s,border-color .15s}
+.pdf-btn:hover{background:var(--accent);color:var(--text);border-color:var(--accent)}
+.pdf-btn svg{width:13px;height:13px;flex-shrink:0}
+.pdf-btn.loading{opacity:.5;cursor:not-allowed;pointer-events:none}
+
+/* PDF OVERLAY */
+.pdf-overlay{display:none;position:fixed;inset:0;background:rgba(77,69,84,.45);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.pdf-overlay.show{display:flex}
+.pdf-modal{background:var(--surface);border-radius:var(--rl);padding:22px 22px 18px;width:260px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.pdf-modal-icon{width:40px;height:40px;background:var(--s2);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.pdf-modal-icon svg{width:20px;height:20px;opacity:.5}
+.pdf-modal h3{font-size:13px;font-weight:700;margin-bottom:5px}
+.pdf-modal p{font-size:11px;color:var(--tm);line-height:1.5;margin-bottom:14px}
+.pdf-progress{height:4px;background:var(--s2);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.pdf-progress-bar{height:100%;background:var(--dark);border-radius:2px;width:0%;transition:width .3s ease}
+.pdf-progress-label{font-size:10px;color:var(--tf);font-weight:500}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="tl">
+      <div class="bm"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="#333"/><rect x="8" y="1" width="5" height="5" rx="1" fill="#333" opacity=".5"/><rect x="1" y="8" width="5" height="5" rx="1" fill="#333" opacity=".5"/><rect x="8" y="8" width="5" height="5" rx="1" fill="#333" opacity=".7"/></svg></div>
+      <span class="at">Evalueringsdashboard <span class="as">· Videocation</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="topbar-title" id="topbarTitle"></span>
+      <div class="dots"><div class="dot active" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="upload-screen" id="usc">
+      <h1 class="sh">Last opp evalueringer</h1>
+      <p class="ss">Eksporter som CSV fra Google Forms og last opp én fil per måling. Koble deretter spørsmålene.</p>
+
+      <div class="nf">
+        <label class="nfl" for="rname">Navn på rapport / program</label>
+        <input class="nfi" type="text" id="rname" placeholder="f.eks. Kræsjkurs i AI — Kunde AS" maxlength="80" autocomplete="off">
+      </div>
+
+      <div class="upair">
+        <div class="uc" id="cp"><input type="file" accept=".csv" id="fp" onchange="hf('pre',this)">
+          <div class="ui"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="ubadge pre">Før</span><span class="un" id="np">Velg CSV-fil</span><span class="um" id="mp">Klikk for å laste opp</span>
+        </div>
+        <div class="uc" id="cq"><input type="file" accept=".csv" id="fq" onchange="hf('post',this)">
+          <div class="ui"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="ubadge post">Etter</span><span class="un" id="nq">Velg CSV-fil</span><span class="um" id="mq">Klikk for å laste opp</span>
+        </div>
+      </div>
+      <div id="mui" style="display:none">
+        <div class="msec">
+          <div class="ml">Koble spørsmål: før → etter <span class="tag">sammenligning</span></div>
+          <div id="pr"></div>
+          <button class="apb" onclick="addP()">+ Legg til spørsmålspar</button>
+        </div>
+        <div class="msec" style="margin-top:14px">
+          <div class="ml">Kun etter-evaluering <span class="tag">programvurdering</span></div>
+          <div id="pgr"></div>
+          <button class="apgb" onclick="addPG()">+ Legg til programspørsmål</button>
+        </div>
+      </div>
+      <div class="fn" style="margin-top:14px"><strong>Tips:</strong> Etter-evalueringen kan ha ekstra spørsmål om programmet. Disse vises i en egen seksjon.</div>
+      <button class="bp" id="ab" onclick="analyze()" disabled>Analyser resultater →</button>
+      <button class="bg" onclick="demo()">Vis med eksempeldata</button>
+    </section>
+
+    <section class="ds" id="dsc">
+      <div class="dtr">
+        <h2 class="dh" id="dashTitle">Resultater</h2>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="pdf-btn" id="pdfbtn" onclick="exportPDF()">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 3a1 1 0 011-1h5l3 3v7a1 1 0 01-1 1H3a1 1 0 01-1-1V3z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 2v3h3M4.5 8.5h5M4.5 10.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Eksporter PDF
+          </button>
+          <button class="rb" onclick="reset()">← Ny analyse</button>
+        </div>
+      </div>
+      <div class="dsubt" id="dashSubt" style="display:none"></div>
+      <div class="mrow">
+        <div class="mt"><div class="mlb">Respondenter</div><div style="display:flex;gap:16px;align-items:flex-end;margin-top:4px"><div><div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:2px">Før</div><div class="mv" id="mr-pre">—</div></div><div><div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:2px">Etter</div><div class="mv" id="mr-post">—</div></div></div></div>
+        <div class="mt"><div class="mlb">Snittendring</div><div class="mv" id="ma">—</div></div>
+        <div class="mt"><div class="mlb">Snitt % endring</div><div class="mv pos" id="mp2">—</div></div>
+        <div class="mt"><div class="mlb">Forbedret</div><div class="mv pos" id="mi">—</div></div>
+      </div>
+      <div class="sdiv">Kompetansemåling — før vs. etter</div>
+      <div class="cc">
+        <div class="ch"><span class="ct">Gjennomsnitt per spørsmål</span>
+          <div class="li"><div class="lii"><span class="lsq" style="background:#FFF5B8"></span>Før</div><div class="lii"><span class="lsq" style="background:#FFE880"></span>Etter</div></div>
+        </div>
+        <div class="cw" id="bcw"><canvas id="bc"></canvas></div>
+      </div>
+      <div class="ql" id="ql"></div>
+      <div id="pgs" style="display:none">
+        <div class="sdiv prog">Programvurdering</div>
+        <div class="ps" id="pgsum"></div>
+        <div class="cc">
+          <div class="ch"><span class="ct">Programspørsmål — snitt</span>
+            <div class="li"><div class="lii"><span class="lsq" style="background:#FFE880"></span>Snitt</div></div>
+          </div>
+          <div class="cw" id="pcw"><canvas id="pc"></canvas></div>
+        </div>
+        <div class="ql" id="pgl"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- PDF MODAL -->
+<div class="pdf-overlay" id="pdfOverlay">
+  <div class="pdf-modal">
+    <div class="pdf-modal-icon"><svg viewBox="0 0 20 20" fill="none"><path d="M4 5a2 2 0 012-2h5l4 4v9a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" stroke="#4D4554" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 3v4h4" stroke="#4D4554" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+    <h3>Genererer PDF…</h3>
+    <p>Dashboardet pakkes inn som PDF.<br>Dette tar noen sekunder.</p>
+    <div class="pdf-progress"><div class="pdf-progress-bar" id="pdfBar"></div></div>
+    <div class="pdf-progress-label" id="pdfLabel">Forbereder…</div>
+  </div>
+</div>
+
+<script>
+let P=null,Q=null,bI=null,pI=null;
+let distCharts={};
+let fullResults=[];
+let fullProgResults=[];
+let reportName='';
+
+function csv(t){const l=t.trim().split('\n'),h=row(l[0]),r=l.slice(1).filter(x=>x.trim()).map(x=>row(x));return{headers:h,rows:r}}
+function row(l){const r=[];let c='',q=false;for(const x of l){if(x==='"'){q=!q}else if(x===','&&!q){r.push(c.trim().replace(/^"|"$/g,''));c=''}else{c+=x}}r.push(c.trim().replace(/^"|"$/g,''));return r}
+function avg(r,i){const v=r.map(x=>parseFloat(x[i])).filter(x=>!isNaN(x));return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
+function mx(r,i){const v=r.map(x=>parseFloat(x[i])).filter(x=>!isNaN(x));return v.length?Math.max(...v):5}
+
+function dist(r,i,scale){
+  const counts={};
+  for(let v=1;v<=scale;v++)counts[v]=0;
+  r.forEach(row=>{const v=parseInt(row[i]);if(!isNaN(v)&&counts[v]!==undefined)counts[v]++});
+  return counts;
+}
+
+function hf(t,inp){
+  const f=inp.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=e=>{
+    const p=csv(e.target.result);
+    if(t==='pre')P=p;else Q=p;
+    document.getElementById(t==='pre'?'cp':'cq').classList.add('loaded');
+    document.getElementById(t==='pre'?'np':'nq').textContent=f.name;
+    document.getElementById(t==='pre'?'mp':'mq').textContent=p.rows.length+' respondenter · CSV';
+    if(P&&Q)buildUI();
+  };
+  rd.readAsText(f);
+}
+
+function opts(d,si){
+  return d.headers.slice(1).map((h,i)=>{
+    return`<option value="${i+1}"${(i+1)===si?' selected':''}>${h}</option>`;
+  }).join('');
+}
+
+function buildUI(){
+  document.getElementById('mui').style.display='block';
+  document.getElementById('ab').disabled=false;
+  dots(2);
+  const n=Math.min(P.headers.length-1,Q.headers.length-1);
+  document.getElementById('pr').innerHTML='';
+  document.getElementById('pgr').innerHTML='';
+  for(let i=0;i<n;i++)addP(i,i);
+  for(let i=n;i<Q.headers.length-1;i++)addPG(i);
+}
+
+function addP(pi,qi){
+  const d=document.createElement('div');d.className='mr';
+  const p=pi!==undefined?pi+1:1,q=qi!==undefined?qi+1:1;
+  d.innerHTML=`<select>${opts(P,p)}</select><div class="ai">→</div><select>${opts(Q,q)}</select><button class="del-btn" onclick="this.closest('.mr').remove()" title="Fjern">×</button>`;
+  document.getElementById('pr').appendChild(d);
+}
+
+function addPG(qi){
+  const d=document.createElement('div');d.className='mpr';
+  const q=qi!==undefined?qi+1:1;
+  d.innerHTML=`<span class="pbl">Program</span><select style="flex:1">${opts(Q,q)}</select><button class="del-btn" onclick="this.closest('.mpr').remove()" title="Fjern">×</button>`;
+  document.getElementById('pgr').appendChild(d);
+}
+
+function analyze(){
+  reportName=document.getElementById('rname').value.trim();
+
+  const pairRows=Array.from(document.querySelectorAll('#pr .mr'));
+  const progRows=Array.from(document.querySelectorAll('#pgr .mpr'));
+  const pairs=pairRows.map(r=>{const s=r.querySelectorAll('select');return{pi:+s[0].value,qi:+s[1].value,pl:P.headers[+s[0].value],ql:Q.headers[+s[1].value]}});
+  const pgs=progRows.map(r=>{const s=r.querySelector('select');return{qi:+s.value,l:Q.headers[+s.value]}});
+
+  const res=pairs.map(p=>{
+    const pa=avg(P.rows,p.pi),qa=avg(Q.rows,p.qi);
+    const sc=Math.max(5,mx(P.rows,p.pi),mx(Q.rows,p.qi));
+    const dp=dist(P.rows,p.pi,sc),dq=dist(Q.rows,p.qi,sc);
+    return{label:p.pl,pre:pa,post:qa,scale:sc,ch:qa-pa,pct:pa?(qa-pa)/pa*100:0,distPre:dp,distPost:dq,preIdx:p.pi,postIdx:p.qi};
+  });
+
+  const pgr=pgs.map(p=>{
+    const a=avg(Q.rows,p.qi),sc=Math.max(5,mx(Q.rows,p.qi));
+    const d=dist(Q.rows,p.qi,sc);
+    return{label:p.l,avg:a,scale:sc,dist:d,postIdx:p.qi};
+  });
+
+  fullResults=res;fullProgResults=pgr;
+
+  const imp=res.filter(r=>r.ch>0).length,ac=res.reduce((a,b)=>a+b.ch,0)/res.length;
+  const avgPct=res.reduce((a,b)=>a+b.pct,0)/res.length;
+  const preN=P.rows.length,postN=Q.rows.length;
+
+  document.getElementById('mr-pre').textContent=preN;
+  document.getElementById('mr-post').textContent=postN;
+  const ae=document.getElementById('ma');ae.textContent=(ac>=0?'+':'')+ac.toFixed(2);ae.className='mv '+(ac>0?'pos':ac<0?'neg':'');
+  const mp2=document.getElementById('mp2');mp2.textContent=(avgPct>=0?'+':'')+avgPct.toFixed(1)+'%';mp2.className='mv '+(avgPct>0?'pos':avgPct<0?'neg':'');
+  document.getElementById('mi').textContent=imp+'/'+res.length;
+
+  // Set report name in dashboard
+  const dashTitle=document.getElementById('dashTitle');
+  const dashSubt=document.getElementById('dashSubt');
+  const topbarTitle=document.getElementById('topbarTitle');
+  if(reportName){
+    dashTitle.textContent=reportName;
+    dashSubt.textContent='Evalueringsresultater · Videocation';
+    dashSubt.style.display='block';
+    topbarTitle.textContent=reportName;
+    topbarTitle.style.display='block';
+  } else {
+    dashTitle.textContent='Resultater';
+    dashSubt.style.display='none';
+    topbarTitle.style.display='none';
+  }
+
+  dots(3);
+  Object.values(distCharts).forEach(c=>{try{c.destroy()}catch(e){}});
+  distCharts={};
+
+  barChart(res);qList(res);progSec(pgr);
+  document.getElementById('usc').style.display='none';
+  document.getElementById('dsc').classList.add('visible');
+}
+
+function barChart(res){
+  if(bI)bI.destroy();
+  const h=Math.max(220,res.length*40);
+  document.getElementById('bcw').style.height=h+'px';
+  bI=new Chart(document.getElementById('bc'),{
+    type:'bar',
+    data:{
+      labels:res.map((_,i)=>'S'+(i+1)),
+      datasets:[
+        {label:'Før',data:res.map(r=>+r.pre.toFixed(2)),backgroundColor:'#FFF5B8',borderRadius:4,barPercentage:.55},
+        {label:'Etter',data:res.map(r=>+r.post.toFixed(2)),backgroundColor:'#FFE880',borderRadius:4,barPercentage:.55}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11,weight:'600'},autoSkip:false},grid:{display:false}},y:{max:5,ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}}
+  });
+}
+
+function renderDist(idx,type){
+  const cid='dc-'+type+'-'+idx;
+  if(distCharts[cid])return;
+  const r=type==='comp'?fullResults[idx]:fullProgResults[idx];
+  const sc=Math.max(5,r.scale);
+  const labels=Array.from({length:sc},(_,i)=>''+(i+1));
+  let datasets=[];
+  if(type==='comp'){
+    const preVals=labels.map(l=>r.distPre[+l]||0);
+    const postVals=labels.map(l=>r.distPost[+l]||0);
+    datasets=[
+      {label:'Før',data:preVals,backgroundColor:'#FFF5B8',borderRadius:3,barPercentage:.7},
+      {label:'Etter',data:postVals,backgroundColor:'#FFE880',borderRadius:3,barPercentage:.7}
+    ];
+  } else {
+    const vals=labels.map(l=>r.dist[+l]||0);
+    datasets=[{label:'Antall',data:vals,backgroundColor:'#FFE880',borderRadius:3,barPercentage:.6}];
+  }
+  const canvas=document.getElementById(cid);
+  distCharts[cid]=new Chart(canvas,{
+    type:'bar',
+    data:{labels,datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:type==='comp',position:'top',labels:{boxWidth:9,font:{family:'Montserrat',size:10},color:'#7A7A7A'}},
+        tooltip:{callbacks:{
+          title:ctx=>'Skalaverdi '+ctx[0].label,
+          label:ctx=>' '+ctx.raw+' svar'
+        }}
+      },
+      scales:{
+        x:{ticks:{color:'#7A7A7A',font:{family:'Montserrat',size:11,weight:'600'}},grid:{display:false}},
+        y:{ticks:{color:'#ABABAB',font:{family:'Montserrat',size:10},stepSize:1,precision:0},grid:{color:'rgba(0,0,0,0.04)'}}
+      }
+    }
+  });
+}
+
+function qList(res){
+  const l=document.getElementById('ql');l.innerHTML='';
+  res.forEach((r,i)=>{
+    const cl=r.ch>0?'pos':r.ch<0?'neg':'neu';
+    const cs=(r.ch>=0?'+':'')+r.ch.toFixed(2)+' ('+r.pct.toFixed(1)+'%)';
+    const pw=(r.pre/r.scale*100).toFixed(1),qw=(r.post/r.scale*100).toFixed(1);
+    const d=document.createElement('div');d.className='qi';
+    d.innerHTML=`
+      <div class="qi-main">
+        <div class="qt"><span class="qn">S${i+1}</span><span class="qtx">${r.label}</span></div>
+        <div class="qs">
+          <span class="sb pre">Før: ${r.pre.toFixed(2)}</span>
+          <span class="sb post">Etter: ${r.post.toFixed(2)}</span>
+          <span class="cc2 ${cl}">${cs}</span>
+        </div>
+        <div class="qb"><div class="qbpre" style="width:${pw}%"></div><div class="qbpost" style="width:${qw}%"></div></div>
+      </div>
+      <div class="dist-panel">
+        <div class="dist-wrap" id="dw-comp-${i}" style="height:120px"><canvas id="dc-comp-${i}"></canvas></div>
+      </div>`;
+    l.appendChild(d);
+  });
+  requestAnimationFrame(()=>res.forEach((_,i)=>renderDist(i,'comp')));
+}
+
+function progSec(pgr){
+  if(!pgr.length){document.getElementById('pgs').style.display='none';return}
+  document.getElementById('pgs').style.display='block';
+  const sm=document.getElementById('pgsum');sm.innerHTML='';
+  pgr.forEach((p,i)=>{
+    const bw=(p.avg/p.scale*100).toFixed(1);
+    const d=document.createElement('div');d.className='pt';
+    d.innerHTML=`<div class="ptq">${p.label}</div><div class="ptv">${p.avg.toFixed(2)}</div><div class="pts">snitt · skala 1–${p.scale}</div><div class="ptb"><div class="ptbf" style="width:${bw}%"></div></div>`;
+    sm.appendChild(d);
+  });
+  if(pI)pI.destroy();
+  const h=Math.max(180,pgr.length*44);
+  document.getElementById('pcw').style.height=h+'px';
+  pI=new Chart(document.getElementById('pc'),{
+    type:'bar',
+    data:{labels:pgr.map((_,i)=>'P'+(i+1)),datasets:[{label:'Snitt',data:pgr.map(p=>+p.avg.toFixed(2)),backgroundColor:'#FFE880',borderRadius:4,barPercentage:.5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11,weight:'600'},autoSkip:false},grid:{display:false}},y:{min:0,max:5,ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}}
+  });
+  const pl=document.getElementById('pgl');pl.innerHTML='';
+  pgr.forEach((p,i)=>{
+    const bw=(p.avg/p.scale*100).toFixed(1);
+    const d=document.createElement('div');d.className='qi';
+    d.innerHTML=`
+      <div class="qi-main">
+        <div class="qt"><span class="qn prog">P${i+1}</span><span class="qtx">${p.label}</span></div>
+        <div class="qs"><span class="sb po">Snitt: ${p.avg.toFixed(2)} / ${p.scale}</span></div>
+        <div class="qb"><div class="qbprog" style="width:${bw}%"></div></div>
+      </div>
+      <div class="dist-panel">
+        <div class="dist-wrap" id="dw-prog-${i}" style="height:120px"><canvas id="dc-prog-${i}"></canvas></div>
+      </div>`;
+    pl.appendChild(d);
+  });
+  requestAnimationFrame(()=>pgr.forEach((_,i)=>renderDist(i,'prog')));
+}
+
+function reset(){
+  P=null;Q=null;reportName='';
+  if(bI){bI.destroy();bI=null}
+  if(pI){pI.destroy();pI=null}
+  Object.values(distCharts).forEach(c=>{try{c.destroy()}catch(e){}});
+  distCharts={};fullResults=[];fullProgResults=[];
+  ['pre','post'].forEach(t=>{
+    document.getElementById(t==='pre'?'cp':'cq').classList.remove('loaded');
+    document.getElementById(t==='pre'?'np':'nq').textContent='Velg CSV-fil';
+    document.getElementById(t==='pre'?'mp':'mq').textContent='Klikk for å laste opp';
+    document.getElementById(t==='pre'?'fp':'fq').value='';
+  });
+  document.getElementById('rname').value='';
+  document.getElementById('mui').style.display='none';
+  document.getElementById('ab').disabled=true;
+  document.getElementById('dsc').classList.remove('visible');
+  document.getElementById('usc').style.display='';
+  document.getElementById('pgs').style.display='none';
+  document.getElementById('topbarTitle').style.display='none';
+  document.getElementById('dashSubt').style.display='none';
+  dots(1);
+}
+
+function dots(a){[1,2,3].forEach(i=>{document.getElementById('d'+i).className='dot'+(i<a?' done':i===a?' active':'')})}
+
+function demo(){
+  document.getElementById('rname').value='Kræsjkurs i AI — Øk produktiviteten';
+  const pc=`"Tidsmerke","I hvilken grad vurderer du din nåværende kompetanse innen AI-verktøy og kunstig intelligens? ","I hvilken grad føler du deg trygg på å bruke ulike AI-verktøy i jobben? ","Hvor ofte bruker du AI-verktøy som ChatGPT eller liknende i arbeidshverdagen din? ","I hvilken grad bruker du AI-verktøy for å effektivisere arbeidsoppgaver som skriving, analyse eller problemløsning? ","Hvor godt kjenner du til beste praksis for å skrive effektive instruksjoner (prompts) til AI-verktøy?"
+"2025/06/02 8:38:46 a.m. CET","4","4","3","4","3"
+"2025/06/02 8:39:01 a.m. CET","1","2","1","1","1"
+"2025/06/02 8:39:03 a.m. CET","2","2","2","1","1"
+"2025/06/02 8:39:08 a.m. CET","3","3","3","4","2"
+"2025/06/02 8:39:09 a.m. CET","3","4","3","3","2"
+"2025/06/02 8:39:18 a.m. CET","3","4","2","2","3"
+"2025/06/02 8:39:19 a.m. CET","3","4","2","2","2"
+"2025/06/02 8:39:22 a.m. CET","1","2","3","3","2"
+"2025/06/02 8:39:23 a.m. CET","1","1","1","1","1"
+"2025/06/02 8:39:24 a.m. CET","2","2","2","1","1"
+"2025/06/02 8:39:28 a.m. CET","1","1","1","1","1"
+"2025/06/02 8:39:28 a.m. CET","2","2","1","1","1"
+"2025/06/02 8:39:30 a.m. CET","2","2","2","2","2"
+"2025/06/02 8:39:33 a.m. CET","3","2","2","1","1"
+"2025/06/02 8:39:33 a.m. CET","3","3","3","3","2"
+"2025/06/02 8:39:34 a.m. CET","2","2","2","2","2"
+"2025/06/02 8:39:34 a.m. CET","2","1","2","1","1"
+"2025/06/02 8:39:38 a.m. CET","1","2","1","1","1"
+"2025/06/02 8:39:38 a.m. CET","3","2","2","1","2"
+"2025/06/02 8:39:40 a.m. CET","2","2","2","2","2"
+"2025/06/02 8:39:44 a.m. CET","2","2","2","2","1"
+"2025/06/02 8:39:49 a.m. CET","2","1","1","1","1"
+"2025/06/02 8:39:50 a.m. CET","1","1","1","1","1"
+"2025/06/02 8:39:50 a.m. CET","3","4","3","4","3"
+"2025/06/02 8:39:52 a.m. CET","3","3","2","2","1"
+"2025/06/02 8:39:55 a.m. CET","1","1","1","1","2"
+"2025/06/02 8:39:57 a.m. CET","4","4","3","1","3"
+"2025/06/02 8:40:47 a.m. CET","1","1","1","1","1"`;
+  const qc=`"Tidsmerke","I hvilken grad vurderer du nå din kompetanse innen AI-verktøy og kunstig intelligens? ","I hvilken grad føler du deg nå trygg på å bruke AI-verktøy i jobben? ","Hvor ofte bruker du nå AI-verktøy som ChatGPT eller liknende i arbeidshverdagen din? ","I hvilken grad bruker du nå AI-verktøy for å effektivisere arbeidsoppgaver som skriving, analyse eller problemløsning? ","Hvor godt kjenner du nå til beste praksis for å skrive effektive instruksjoner (prompts) til AI-verktøy?","Hvordan vurderer du programmet i sin helhet?","I hvilken grad møtte programmet forventingene dine?","I hvilken grad opplever du at tilgang til Videocation har bedret lærings- og utviklingsmulighetene som tilbys i din virksomhet","Hvor sannsynlig er det at du ville anbefalt dette programmet til en kollega?"
+"2025/09/22 9:32:42 a.m. CET","3","3","4","5","4","5","5","4","5"
+"2025/09/22 9:33:01 a.m. CET","3","4","3","4","3","5","4","4","4"
+"2025/09/22 9:33:11 a.m. CET","3","4","3","3","3","4","5","4","4"
+"2025/09/22 9:33:14 a.m. CET","3","4","3","3","3","3","3","3","3"
+"2025/09/22 9:33:20 a.m. CET","3","4","4","4","4","4","5","3","5"
+"2025/09/22 9:33:24 a.m. CET","3","3","4","2","3","4","4","4","4"
+"2025/09/22 9:33:28 a.m. CET","3","2","2","2","2","3","4","3","3"
+"2025/09/22 9:33:33 a.m. CET","2","2","2","3","3","4","4","4","4"
+"2025/09/22 9:33:36 a.m. CET","3","3","2","2","1","4","4","3","5"
+"2025/09/22 9:33:39 a.m. CET","3","4","3","3","4","5","5","5","5"
+"2025/09/22 9:33:41 a.m. CET","3","4","5","3","4","4","4","4","4"
+"2025/09/22 9:33:44 a.m. CET","3","4","4","5","4","5","5","4","5"
+"2025/09/22 9:33:58 a.m. CET","2","2","2","2","2","3","4","3","3"
+"2025/09/22 9:34:02 a.m. CET","2","3","2","2","4","5","5","4","5"
+"2025/09/22 9:34:20 a.m. CET","4","3","3","3","3","4","4","4","4"
+"2025/09/22 9:34:33 a.m. CET","4","4","2","1","4","4","4","2","1"
+"2025/09/22 9:35:30 a.m. CET","4","5","5","3","4","4","4","3","4"
+"2025/09/22 9:35:38 a.m. CET","3","2","5","5","4","5","5","4","4"`;
+  P=csv(pc);Q=csv(qc);
+  ['pre','post'].forEach(t=>{
+    document.getElementById(t==='pre'?'cp':'cq').classList.add('loaded');
+    document.getElementById(t==='pre'?'np':'nq').textContent=t==='pre'?'Før-måling_Kræsjkurs_i_AI.csv':'Etter-måling_Kræsjkurs_i_AI.csv';
+    document.getElementById(t==='pre'?'mp':'mq').textContent=(t==='pre'?'28':'18')+' respondenter · CSV';
+  });
+  buildUI();analyze();
+}
+
+async function exportPDF(){
+  const btn=document.getElementById('pdfbtn');
+  const overlay=document.getElementById('pdfOverlay');
+  const bar=document.getElementById('pdfBar');
+  const lbl=document.getElementById('pdfLabel');
+
+  btn.classList.add('loading');
+  overlay.classList.add('show');
+  bar.style.width='0%';
+  lbl.textContent='Forbereder innhold…';
+
+  await new Promise(r=>setTimeout(r,200));
+
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const pageW=210,pageH=297,margin=14,contentW=pageW-margin*2;
+
+  function prog(pct,txt){bar.style.width=pct+'%';lbl.textContent=txt}
+
+  async function addEl(el,yRef,opts={}){
+    const scale=opts.scale||2;
+    const canvas=await html2canvas(el,{
+      scale,useCORS:true,allowTaint:true,backgroundColor:'#ffffff',logging:false,
+      onclone:(doc,clone)=>{clone.querySelectorAll('.dist-panel').forEach(p=>p.style.display='block');}
+    });
+    const imgData=canvas.toDataURL('image/jpeg',0.92);
+    const elW=el.offsetWidth,elH=el.offsetHeight;
+    const ratio=contentW/elW;
+    const drawH=elH*ratio;
+    if(yRef.y+drawH>pageH-margin){pdf.addPage();yRef.y=margin;}
+    pdf.addImage(imgData,'JPEG',margin,yRef.y,contentW,drawH);
+    yRef.y+=drawH+6;
+    return drawH;
+  }
+
+  try{
+    prog(10,'Lager header…');
+    const y={y:margin};
+
+    // Header
+    pdf.setFillColor(77,69,84);
+    pdf.roundedRect(margin,y.y,contentW,reportName?22:18,3,3,'F');
+    pdf.setFont('helvetica','bold');
+    pdf.setFontSize(11);
+    pdf.setTextColor(255,255,255);
+    pdf.text(reportName||'Evalueringsrapport',margin+6,y.y+(reportName?8:7.5));
+    pdf.setFont('helvetica','normal');
+    pdf.setFontSize(8);
+    pdf.setTextColor(200,195,210);
+    const now=new Date();
+    const dateStr='Videocation · Eksportert '+now.toLocaleDateString('nb-NO',{day:'2-digit',month:'long',year:'numeric'});
+    pdf.text(reportName?'Evalueringsresultater · '+dateStr:dateStr,margin+6,y.y+(reportName?15:13));
+    y.y+=(reportName?28:24);
+
+    prog(20,'Henter nøkkeltall…');
+    const mrow=document.querySelector('.mrow');
+    if(mrow)await addEl(mrow,y,{scale:2});
+
+    prog(35,'Henter søylediagram…');
+    const bcCard=document.querySelector('#bcw')?.closest('.cc');
+    if(bcCard)await addEl(bcCard,y,{scale:2});
+
+    prog(55,'Henter spørsmålskort…');
+    const qItems=document.querySelectorAll('#ql .qi');
+    for(let i=0;i<qItems.length;i++){
+      await addEl(qItems[i],y,{scale:2});
+      prog(55+Math.round((i+1)/qItems.length*20),'Spørsmål '+(i+1)+' av '+qItems.length+'…');
+    }
+
+    prog(78,'Sjekker programvurdering…');
+    const pgs=document.getElementById('pgs');
+    if(pgs&&pgs.style.display!=='none'){
+      if(y.y+6>pageH-margin){pdf.addPage();y.y=margin;}
+      pdf.setDrawColor(194,194,194);
+      pdf.setLineWidth(0.3);
+      pdf.line(margin,y.y+3,pageW-margin,y.y+3);
+      pdf.setFont('helvetica','bold');
+      pdf.setFontSize(8);
+      pdf.setTextColor(77,69,84);
+      pdf.text('PROGRAMVURDERING',pageW/2,y.y+3,{align:'center',baseline:'middle'});
+      y.y+=10;
+      const pgsum=document.getElementById('pgsum');
+      if(pgsum)await addEl(pgsum,y,{scale:2});
+      const pcCard=document.querySelector('#pcw')?.closest('.cc');
+      if(pcCard)await addEl(pcCard,y,{scale:2});
+      const pgItems=document.querySelectorAll('#pgl .qi');
+      for(let i=0;i<pgItems.length;i++){
+        await addEl(pgItems[i],y,{scale:2});
+        prog(80+Math.round((i+1)/pgItems.length*15),'Programspørsmål '+(i+1)+'…');
+      }
+    }
+
+    prog(97,'Lagrer fil…');
+    const slug=(reportName?reportName.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,''):'evalueringsrapport');
+    pdf.save(slug+'_'+now.toISOString().slice(0,10)+'.pdf');
+    prog(100,'Ferdig!');
+    await new Promise(r=>setTimeout(r,600));
+
+  } catch(err){
+    console.error('PDF-feil:',err);
+    lbl.textContent='Noe gikk galt. Prøv igjen.';
+    await new Promise(r=>setTimeout(r,1500));
+  }
+
+  overlay.classList.remove('show');
+  btn.classList.remove('loading');
+}
+</script>
+</body>
+</html>
