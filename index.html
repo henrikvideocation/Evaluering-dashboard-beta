@@ -19,8 +19,6 @@
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5}
 .wrap{display:grid;grid-template-rows:54px 1fr;height:100vh;overflow:hidden}
-
-/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--dark);flex-shrink:0}
 .tl{display:flex;align-items:center;gap:12px}
 .bm{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center}
@@ -33,19 +31,19 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .dot.active{background:var(--accent)}
 .dot.done{background:rgba(255,255,255,.5)}
 
-.main{overflow-y:auto;padding:24px 20px 48px}
+/* LANG TOGGLE */
+.lang-btn{display:flex;background:rgba(255,255,255,.1);border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.15)}
+.lang-btn button{font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:.5px;color:rgba(255,255,255,.45);background:none;border:none;padding:4px 9px;cursor:pointer;transition:background .15s,color .15s}
+.lang-btn button.active{background:var(--accent);color:var(--text);border-radius:20px}
 
-/* UPLOAD */
+.main{overflow-y:auto;padding:24px 20px 48px}
 .sh{font-size:18px;font-weight:700;margin-bottom:5px;letter-spacing:-.3px}
 .ss{font-size:13px;color:var(--tm);margin-bottom:22px;line-height:1.55}
-
-/* NAME FIELD */
 .nf{margin-bottom:18px}
 .nfl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);margin-bottom:7px;display:block}
 .nfi{width:100%;padding:10px 14px;background:var(--surface);border:1.5px solid var(--bs);border-radius:var(--r);font-family:var(--font);font-size:13px;font-weight:500;color:var(--text);transition:border-color .2s,box-shadow .2s;outline:none}
 .nfi::placeholder{color:var(--tf)}
 .nfi:focus{border-color:var(--dark);box-shadow:0 0 0 3px rgba(77,69,84,.07)}
-
 .upair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .uc{background:var(--surface);border:1.5px dashed var(--bs);border-radius:var(--rl);padding:18px 14px;cursor:pointer;transition:border-color .2s,background .2s,transform .15s;position:relative;text-align:center}
 .uc:hover{border-color:var(--dark);transform:translateY(-1px)}
@@ -62,36 +60,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .un{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .um{font-size:11px;color:var(--tf)}
 .uc.loaded .un{color:var(--dark)}
-
-/* MAPPING */
 .msec{margin-bottom:16px}
 .ml{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .ml .tag{background:var(--s2);padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;color:var(--tm)}
-
 .mr{display:grid;grid-template-columns:1fr 20px 1fr 28px;align-items:center;gap:6px;margin-bottom:8px}
 .mr select,.mpr select{font-family:var(--font);font-size:11px;padding:7px 10px;background:var(--surface);border:1px solid var(--bs);border-radius:var(--r);color:var(--text);width:100%;cursor:pointer;appearance:none;-webkit-appearance:none}
 .mr select:focus,.mpr select:focus{outline:none;border-color:var(--dark)}
 .ai{text-align:center;font-size:12px;color:var(--tf)}
-
 .mpr{display:flex;align-items:center;gap:6px;margin-bottom:8px}
 .pbl{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--dark);color:#fff;white-space:nowrap;flex-shrink:0}
-
 .del-btn{width:24px;height:24px;flex-shrink:0;background:none;border:1px solid var(--bs);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tm);font-size:14px;line-height:1;transition:background .15s,color .15s;font-family:var(--font)}
 .del-btn:hover{background:var(--neg-bg);color:var(--neg);border-color:var(--neg)}
-
 .apb,.apgb{font-size:11px;font-weight:500;color:var(--tm);background:none;border:1px dashed var(--bs);border-radius:var(--r);padding:7px 12px;cursor:pointer;margin-top:2px;transition:background .15s;font-family:var(--font);width:100%;text-align:left}
 .apb:hover,.apgb:hover{background:var(--s2)}
-
 .fn{background:var(--s2);border-radius:var(--r);padding:11px 13px;font-size:11px;color:var(--tm);line-height:1.6;margin-bottom:18px;border-left:3px solid var(--s3)}
 .fn strong{color:var(--text);font-weight:600}
-
 .bp{width:100%;padding:13px;background:var(--accent);color:var(--text);border:none;border-radius:20px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;transition:opacity .15s,transform .1s}
 .bp:hover:not(:disabled){opacity:.88;transform:translateY(-1px)}
 .bp:disabled{opacity:.3;cursor:not-allowed}
 .bg{width:100%;padding:11px;background:transparent;color:var(--tm);border:1px solid var(--bs);border-radius:20px;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;transition:background .15s}
 .bg:hover{background:var(--s2)}
-
-/* DASHBOARD */
 .ds{display:none}
 .ds.visible{display:block}
 .dtr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -99,19 +87,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .dsubt{font-size:12px;color:var(--tm);font-weight:500;margin-bottom:16px}
 .rb{font-size:11px;font-weight:600;color:var(--tm);background:none;border:1px solid var(--bs);border-radius:20px;padding:5px 12px;cursor:pointer;font-family:var(--font);transition:background .15s}
 .rb:hover{background:var(--s2)}
-
 .mrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
 .mt{background:var(--dark);border-radius:var(--r);padding:13px 13px 12px}
 .mlb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.45);margin-bottom:5px}
 .mv{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.5px}
 .mv.pos{color:var(--accent)}
 .mv.neg{color:#F0997B}
-
 .sdiv{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);margin:20px 0 14px}
 .sdiv::before,.sdiv::after{content:'';flex:1;height:1px;background:var(--border)}
 .sdiv.prog{color:var(--dark)}
 .sdiv.prog::before,.sdiv.prog::after{background:var(--s3)}
-
 .cc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 16px 12px;margin-bottom:14px}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .ct{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm)}
@@ -119,8 +104,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .lii{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--tm);font-weight:500}
 .lsq{width:9px;height:9px;border-radius:2px}
 .cw{position:relative;width:100%}
-
-/* Q ITEMS */
 .ql{display:flex;flex-direction:column;gap:8px;margin-bottom:6px}
 .qi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .15s}
 .qi:hover{border-color:var(--s3)}
@@ -142,12 +125,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .qbpre{position:absolute;height:100%;top:0;left:0;background:var(--s3);border-radius:2px}
 .qbpost{position:absolute;height:100%;top:0;left:0;background:var(--dark);border-radius:2px;opacity:.7}
 .qbprog{position:absolute;height:100%;top:0;left:0;background:var(--accent);border-radius:2px}
-
 .expand-btn{display:none}
 .dist-panel{display:block;padding:12px 14px 14px;border-top:1px solid var(--border);background:var(--bg)}
 .dist-wrap{position:relative;width:100%;height:120px!important}
-
-/* PROGRAM TILES */
 .ps{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
 .pt{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 13px}
 .ptq{font-size:11px;font-weight:500;color:var(--tm);margin-bottom:6px;line-height:1.3}
@@ -155,18 +135,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .pts{font-size:10px;color:var(--tf);margin-top:1px;font-weight:500}
 .ptb{height:3px;background:var(--s2);border-radius:2px;margin-top:8px}
 .ptbf{height:100%;background:var(--accent);border-radius:2px}
-
 .upload-screen{animation:fu .3s ease}
 .ds.visible{animation:fu .35s ease}
 @keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* PDF EXPORT */
 .pdf-btn{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--tm);background:none;border:1px solid var(--bs);border-radius:20px;padding:5px 12px;cursor:pointer;font-family:var(--font);transition:background .15s,color .15s,border-color .15s}
 .pdf-btn:hover{background:var(--accent);color:var(--text);border-color:var(--accent)}
 .pdf-btn svg{width:13px;height:13px;flex-shrink:0}
 .pdf-btn.loading{opacity:.5;cursor:not-allowed;pointer-events:none}
-
-/* PDF OVERLAY */
 .pdf-overlay{display:none;position:fixed;inset:0;background:rgba(77,69,84,.45);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 .pdf-overlay.show{display:flex}
 .pdf-modal{background:var(--surface);border-radius:var(--rl);padding:22px 22px 18px;width:260px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.18)}
@@ -184,83 +159,87 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   <header class="topbar">
     <div class="tl">
       <div class="bm"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="#333"/><rect x="8" y="1" width="5" height="5" rx="1" fill="#333" opacity=".5"/><rect x="1" y="8" width="5" height="5" rx="1" fill="#333" opacity=".5"/><rect x="8" y="8" width="5" height="5" rx="1" fill="#333" opacity=".7"/></svg></div>
-      <span class="at">Evalueringsdashboard <span class="as">· Videocation</span></span>
+      <span class="at" id="topbarLabel">Evalueringsdashboard <span class="as">· Videocation</span></span>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <span class="topbar-title" id="topbarTitle"></span>
+      <div class="lang-btn">
+        <button id="lno" class="active" onclick="setLang('no')">NO</button>
+        <button id="len" onclick="setLang('en')">EN</button>
+      </div>
       <div class="dots"><div class="dot active" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
     </div>
   </header>
 
   <main class="main">
     <section class="upload-screen" id="usc">
-      <h1 class="sh">Last opp evalueringer</h1>
-      <p class="ss">Eksporter som CSV fra Google Forms og last opp én fil per måling. Koble deretter spørsmålene.</p>
-
+      <h1 class="sh" id="t-sh"></h1>
+      <p class="ss" id="t-ss"></p>
       <div class="nf">
-        <label class="nfl" for="rname">Navn på rapport / program</label>
-        <input class="nfi" type="text" id="rname" placeholder="f.eks. Kræsjkurs i AI — Kunde AS" maxlength="80" autocomplete="off">
+        <label class="nfl" for="rname" id="t-nfl"></label>
+        <input class="nfi" type="text" id="rname" maxlength="80" autocomplete="off">
       </div>
-
       <div class="upair">
         <div class="uc" id="cp"><input type="file" accept=".csv" id="fp" onchange="hf('pre',this)">
           <div class="ui"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <span class="ubadge pre">Før</span><span class="un" id="np">Velg CSV-fil</span><span class="um" id="mp">Klikk for å laste opp</span>
+          <span class="ubadge pre" id="t-badge-pre"></span><span class="un" id="np" data-default="pick-csv"></span><span class="um" id="mp" data-default="click-upload"></span>
         </div>
         <div class="uc" id="cq"><input type="file" accept=".csv" id="fq" onchange="hf('post',this)">
           <div class="ui"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <span class="ubadge post">Etter</span><span class="un" id="nq">Velg CSV-fil</span><span class="um" id="mq">Klikk for å laste opp</span>
+          <span class="ubadge post" id="t-badge-post"></span><span class="un" id="nq" data-default="pick-csv"></span><span class="um" id="mq" data-default="click-upload"></span>
         </div>
       </div>
       <div id="mui" style="display:none">
         <div class="msec">
-          <div class="ml">Koble spørsmål: før → etter <span class="tag">sammenligning</span></div>
+          <div class="ml" id="t-map-comp"></div>
           <div id="pr"></div>
-          <button class="apb" onclick="addP()">+ Legg til spørsmålspar</button>
+          <button class="apb" id="t-addpair" onclick="addP()"></button>
         </div>
         <div class="msec" style="margin-top:14px">
-          <div class="ml">Kun etter-evaluering <span class="tag">programvurdering</span></div>
+          <div class="ml" id="t-map-prog"></div>
           <div id="pgr"></div>
-          <button class="apgb" onclick="addPG()">+ Legg til programspørsmål</button>
+          <button class="apgb" id="t-addprog" onclick="addPG()"></button>
         </div>
       </div>
-      <div class="fn" style="margin-top:14px"><strong>Tips:</strong> Etter-evalueringen kan ha ekstra spørsmål om programmet. Disse vises i en egen seksjon.</div>
-      <button class="bp" id="ab" onclick="analyze()" disabled>Analyser resultater →</button>
-      <button class="bg" onclick="demo()">Vis med eksempeldata</button>
+      <div class="fn" style="margin-top:14px" id="t-tip"></div>
+      <button class="bp" id="ab" onclick="analyze()" disabled id="t-analyze"></button>
+      <button class="bg" onclick="demo()" id="t-demo"></button>
     </section>
 
     <section class="ds" id="dsc">
       <div class="dtr">
-        <h2 class="dh" id="dashTitle">Resultater</h2>
+        <h2 class="dh" id="dashTitle"></h2>
         <div style="display:flex;gap:8px;align-items:center">
           <button class="pdf-btn" id="pdfbtn" onclick="exportPDF()">
             <svg viewBox="0 0 14 14" fill="none"><path d="M2 3a1 1 0 011-1h5l3 3v7a1 1 0 01-1 1H3a1 1 0 01-1-1V3z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 2v3h3M4.5 8.5h5M4.5 10.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-            Eksporter PDF
+            <span id="t-pdf"></span>
           </button>
-          <button class="rb" onclick="reset()">← Ny analyse</button>
+          <button class="rb" onclick="reset()" id="t-reset"></button>
         </div>
       </div>
       <div class="dsubt" id="dashSubt" style="display:none"></div>
       <div class="mrow">
-        <div class="mt"><div class="mlb">Respondenter</div><div style="display:flex;gap:16px;align-items:flex-end;margin-top:4px"><div><div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:2px">Før</div><div class="mv" id="mr-pre">—</div></div><div><div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:2px">Etter</div><div class="mv" id="mr-post">—</div></div></div></div>
-        <div class="mt"><div class="mlb">Snittendring</div><div class="mv" id="ma">—</div></div>
-        <div class="mt"><div class="mlb">Snitt % endring</div><div class="mv pos" id="mp2">—</div></div>
-        <div class="mt"><div class="mlb">Forbedret</div><div class="mv pos" id="mi">—</div></div>
+        <div class="mt"><div class="mlb" id="t-m-resp"></div><div style="display:flex;gap:16px;align-items:flex-end;margin-top:4px"><div><div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:2px" id="t-m-pre"></div><div class="mv" id="mr-pre">—</div></div><div><div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:2px" id="t-m-post"></div><div class="mv" id="mr-post">—</div></div></div></div>
+        <div class="mt"><div class="mlb" id="t-m-change"></div><div class="mv" id="ma">—</div></div>
+        <div class="mt"><div class="mlb" id="t-m-pct"></div><div class="mv pos" id="mp2">—</div></div>
+        <div class="mt"><div class="mlb" id="t-m-imp"></div><div class="mv pos" id="mi">—</div></div>
       </div>
-      <div class="sdiv">Kompetansemåling — før vs. etter</div>
+      <div class="sdiv" id="t-sdiv-comp"></div>
       <div class="cc">
-        <div class="ch"><span class="ct">Gjennomsnitt per spørsmål</span>
-          <div class="li"><div class="lii"><span class="lsq" style="background:#FFF5B8"></span>Før</div><div class="lii"><span class="lsq" style="background:#FFE880"></span>Etter</div></div>
+        <div class="ch">
+          <span class="ct" id="t-chart-avg"></span>
+          <div class="li"><div class="lii"><span class="lsq" style="background:#FFF5B8"></span><span id="t-li-pre"></span></div><div class="lii"><span class="lsq" style="background:#FFE880"></span><span id="t-li-post"></span></div></div>
         </div>
         <div class="cw" id="bcw"><canvas id="bc"></canvas></div>
       </div>
       <div class="ql" id="ql"></div>
       <div id="pgs" style="display:none">
-        <div class="sdiv prog">Programvurdering</div>
+        <div class="sdiv prog" id="t-sdiv-prog"></div>
         <div class="ps" id="pgsum"></div>
         <div class="cc">
-          <div class="ch"><span class="ct">Programspørsmål — snitt</span>
-            <div class="li"><div class="lii"><span class="lsq" style="background:#FFE880"></span>Snitt</div></div>
+          <div class="ch">
+            <span class="ct" id="t-chart-prog"></span>
+            <div class="li"><div class="lii"><span class="lsq" style="background:#FFE880"></span><span id="t-li-avg"></span></div></div>
           </div>
           <div class="cw" id="pcw"><canvas id="pc"></canvas></div>
         </div>
@@ -274,21 +253,236 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <div class="pdf-overlay" id="pdfOverlay">
   <div class="pdf-modal">
     <div class="pdf-modal-icon"><svg viewBox="0 0 20 20" fill="none"><path d="M4 5a2 2 0 012-2h5l4 4v9a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" stroke="#4D4554" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 3v4h4" stroke="#4D4554" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
-    <h3>Genererer PDF…</h3>
-    <p>Dashboardet pakkes inn som PDF.<br>Dette tar noen sekunder.</p>
+    <h3 id="t-pdf-title"></h3>
+    <p id="t-pdf-body"></p>
     <div class="pdf-progress"><div class="pdf-progress-bar" id="pdfBar"></div></div>
-    <div class="pdf-progress-label" id="pdfLabel">Forbereder…</div>
+    <div class="pdf-progress-label" id="pdfLabel"></div>
   </div>
 </div>
 
 <script>
+// ── LANGUAGE STRINGS ─────────────────────────────────────────────────────────
+const STRINGS = {
+  no: {
+    pageTitle:       'Evalueringsdashboard — Videocation',
+    topbarLabel:     'Evalueringsdashboard',
+    sh:              'Last opp evalueringer',
+    ss:              'Eksporter som CSV fra Google Forms og last opp én fil per måling. Koble deretter spørsmålene.',
+    nfl:             'Navn på rapport / program',
+    nfiPlaceholder:  'f.eks. Kræsjkurs i AI — Kunde AS',
+    badgePre:        'Før',
+    badgePost:       'Etter',
+    pickCsv:         'Velg CSV-fil',
+    clickUpload:     'Klikk for å laste opp',
+    respondents:     'respondenter · CSV',
+    mapCompLabel:    'Koble spørsmål: før → etter',
+    mapCompTag:      'sammenligning',
+    mapProgLabel:    'Kun etter-evaluering',
+    mapProgTag:      'programvurdering',
+    addPair:         '+ Legg til spørsmålspar',
+    addProg:         '+ Legg til programspørsmål',
+    tip:             '<strong>Tips:</strong> Etter-evalueringen kan ha ekstra spørsmål om programmet. Disse vises i en egen seksjon.',
+    analyze:         'Analyser resultater →',
+    demo:            'Vis med eksempeldata',
+    defaultTitle:    'Resultater',
+    dashSubt:        'Evalueringsresultater · Videocation',
+    pdf:             'Eksporter PDF',
+    reset:           '← Ny analyse',
+    mResp:           'Respondenter',
+    mPre:            'Før',
+    mPost:           'Etter',
+    mChange:         'Snittendring',
+    mPct:            'Snitt % endring',
+    mImp:            'Forbedret',
+    sdivComp:        'Kompetansemåling — før vs. etter',
+    chartAvg:        'Gjennomsnitt per spørsmål',
+    liPre:           'Før',
+    liPost:          'Etter',
+    sdivProg:        'Programvurdering',
+    chartProg:       'Programspørsmål — snitt',
+    liAvg:           'Snitt',
+    avgLabel:        'snitt · skala',
+    scaleVal:        'Skalaverdi',
+    answers:         'svar',
+    pdfTitle:        'Genererer PDF…',
+    pdfBody:         'Dashboardet pakkes inn som PDF.<br>Dette tar noen sekunder.',
+    pdfPreparing:    'Forbereder innhold…',
+    pdfHeader:       'Lager header…',
+    pdfMetrics:      'Henter nøkkeltall…',
+    pdfChart:        'Henter søylediagram…',
+    pdfQuestions:    'Henter spørsmålskort…',
+    pdfQOf:          'av',
+    pdfProgCheck:    'Sjekker programvurdering…',
+    pdfSaving:       'Lagrer fil…',
+    pdfDone:         'Ferdig!',
+    pdfError:        'Noe gikk galt. Prøv igjen.',
+    pdfProgSection:  'PROGRAMVURDERING',
+    pdfProgQ:        'Programspørsmål',
+    pdfSpørsmål:     'Spørsmål',
+    pdfExported:     'Eksportert',
+    pdfEvalResults:  'Evalueringsresultater',
+    pdfEvalReport:   'Evalueringsrapport',
+    fjern:           'Fjern',
+    program:         'Program',
+  },
+  en: {
+    pageTitle:       'Evaluation Dashboard — Videocation',
+    topbarLabel:     'Evaluation Dashboard',
+    sh:              'Upload evaluations',
+    ss:              'Export as CSV from Google Forms and upload one file per measurement. Then map the questions.',
+    nfl:             'Report / program name',
+    nfiPlaceholder:  'e.g. AI Crash Course — Client Ltd.',
+    badgePre:        'Before',
+    badgePost:       'After',
+    pickCsv:         'Select CSV file',
+    clickUpload:     'Click to upload',
+    respondents:     'respondents · CSV',
+    mapCompLabel:    'Map questions: before → after',
+    mapCompTag:      'comparison',
+    mapProgLabel:    'Post-evaluation only',
+    mapProgTag:      'program rating',
+    addPair:         '+ Add question pair',
+    addProg:         '+ Add program question',
+    tip:             '<strong>Tip:</strong> The post-evaluation can include extra questions about the program. These are shown in a separate section.',
+    analyze:         'Analyse results →',
+    demo:            'Show with sample data',
+    defaultTitle:    'Results',
+    dashSubt:        'Evaluation results · Videocation',
+    pdf:             'Export PDF',
+    reset:           '← New analysis',
+    mResp:           'Respondents',
+    mPre:            'Before',
+    mPost:           'After',
+    mChange:         'Avg. change',
+    mPct:            'Avg. % change',
+    mImp:            'Improved',
+    sdivComp:        'Competency measurement — before vs. after',
+    chartAvg:        'Average per question',
+    liPre:           'Before',
+    liPost:          'After',
+    sdivProg:        'Program rating',
+    chartProg:       'Program questions — average',
+    liAvg:           'Average',
+    avgLabel:        'avg · scale',
+    scaleVal:        'Scale value',
+    answers:         'responses',
+    pdfTitle:        'Generating PDF…',
+    pdfBody:         'The dashboard is being packaged as a PDF.<br>This takes a few seconds.',
+    pdfPreparing:    'Preparing content…',
+    pdfHeader:       'Building header…',
+    pdfMetrics:      'Fetching key metrics…',
+    pdfChart:        'Fetching bar chart…',
+    pdfQuestions:    'Fetching question cards…',
+    pdfQOf:          'of',
+    pdfProgCheck:    'Checking program rating…',
+    pdfSaving:       'Saving file…',
+    pdfDone:         'Done!',
+    pdfError:        'Something went wrong. Please try again.',
+    pdfProgSection:  'PROGRAM RATING',
+    pdfProgQ:        'Program question',
+    pdfSpørsmål:     'Question',
+    pdfExported:     'Exported',
+    pdfEvalResults:  'Evaluation results',
+    pdfEvalReport:   'Evaluation report',
+    fjern:           'Remove',
+    program:         'Program',
+  }
+};
+
+let lang = 'no';
+function t(k){ return STRINGS[lang][k] || STRINGS.no[k] || k; }
+
+function setLang(l){
+  lang = l;
+  document.getElementById('lno').className = l==='no'?'active':'';
+  document.getElementById('len').className = l==='en'?'active':'';
+  document.documentElement.lang = l;
+  applyStrings();
+  // re-render dashboard if visible
+  if(fullResults.length) {
+    Object.values(distCharts).forEach(c=>{try{c.destroy()}catch(e){}});
+    distCharts={};
+    if(bI){bI.destroy();bI=null;}
+    if(pI){pI.destroy();pI=null;}
+    barChart(fullResults);
+    qList(fullResults);
+    progSec(fullProgResults);
+    updateDashStrings();
+  }
+}
+
+function applyStrings(){
+  document.title = t('pageTitle');
+  document.getElementById('topbarLabel').innerHTML = t('topbarLabel')+' <span class="as">· Videocation</span>';
+  document.getElementById('t-sh').textContent = t('sh');
+  document.getElementById('t-ss').textContent = t('ss');
+  document.getElementById('t-nfl').textContent = t('nfl');
+  document.getElementById('rname').placeholder = t('nfiPlaceholder');
+  document.getElementById('t-badge-pre').textContent = t('badgePre');
+  document.getElementById('t-badge-post').textContent = t('badgePost');
+  // upload boxes — only update if not loaded
+  if(!document.getElementById('cp').classList.contains('loaded')){
+    document.getElementById('np').textContent = t('pickCsv');
+    document.getElementById('mp').textContent = t('clickUpload');
+  }
+  if(!document.getElementById('cq').classList.contains('loaded')){
+    document.getElementById('nq').textContent = t('pickCsv');
+    document.getElementById('mq').textContent = t('clickUpload');
+  }
+  document.getElementById('t-map-comp').innerHTML = t('mapCompLabel')+' <span class="tag">'+t('mapCompTag')+'</span>';
+  document.getElementById('t-map-prog').innerHTML = t('mapProgLabel')+' <span class="tag">'+t('mapProgTag')+'</span>';
+  document.getElementById('t-addpair').textContent = t('addPair');
+  document.getElementById('t-addprog').textContent = t('addProg');
+  document.getElementById('t-tip').innerHTML = t('tip');
+  document.getElementById('ab').textContent = t('analyze');
+  document.getElementById('t-demo').textContent = t('demo');
+  document.getElementById('t-pdf').textContent = t('pdf');
+  document.getElementById('t-reset').textContent = t('reset');
+  document.getElementById('t-m-resp').textContent = t('mResp');
+  document.getElementById('t-m-pre').textContent = t('mPre');
+  document.getElementById('t-m-post').textContent = t('mPost');
+  document.getElementById('t-m-change').textContent = t('mChange');
+  document.getElementById('t-m-pct').textContent = t('mPct');
+  document.getElementById('t-m-imp').textContent = t('mImp');
+  document.getElementById('t-sdiv-comp').textContent = t('sdivComp');
+  document.getElementById('t-chart-avg').textContent = t('chartAvg');
+  document.getElementById('t-li-pre').textContent = t('liPre');
+  document.getElementById('t-li-post').textContent = t('liPost');
+  document.getElementById('t-sdiv-prog').textContent = t('sdivProg');
+  document.getElementById('t-chart-prog').textContent = t('chartProg');
+  document.getElementById('t-li-avg').textContent = t('liAvg');
+  document.getElementById('t-pdf-title').textContent = t('pdfTitle');
+  document.getElementById('t-pdf-body').innerHTML = t('pdfBody');
+  // program label badges in mapping UI
+  document.querySelectorAll('.pbl').forEach(el => el.textContent = t('program'));
+}
+
+function updateDashStrings(){
+  const rn = reportName;
+  const dashTitle = document.getElementById('dashTitle');
+  const dashSubt = document.getElementById('dashSubt');
+  const topbarTitle = document.getElementById('topbarTitle');
+  if(rn){
+    dashTitle.textContent = rn;
+    dashSubt.textContent = t('dashSubt');
+    dashSubt.style.display = 'block';
+    topbarTitle.textContent = rn;
+    topbarTitle.style.display = 'block';
+  } else {
+    dashTitle.textContent = t('defaultTitle');
+    dashSubt.style.display = 'none';
+    topbarTitle.style.display = 'none';
+  }
+}
+
+// ── CORE LOGIC ────────────────────────────────────────────────────────────────
 let P=null,Q=null,bI=null,pI=null;
 let distCharts={};
 let fullResults=[];
 let fullProgResults=[];
 let reportName='';
 
-function csv(t){const l=t.trim().split('\n'),h=row(l[0]),r=l.slice(1).filter(x=>x.trim()).map(x=>row(x));return{headers:h,rows:r}}
+function csv(t2){const l=t2.trim().split('\n'),h=row(l[0]),r=l.slice(1).filter(x=>x.trim()).map(x=>row(x));return{headers:h,rows:r}}
 function row(l){const r=[];let c='',q=false;for(const x of l){if(x==='"'){q=!q}else if(x===','&&!q){r.push(c.trim().replace(/^"|"$/g,''));c=''}else{c+=x}}r.push(c.trim().replace(/^"|"$/g,''));return r}
 function avg(r,i){const v=r.map(x=>parseFloat(x[i])).filter(x=>!isNaN(x));return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
 function mx(r,i){const v=r.map(x=>parseFloat(x[i])).filter(x=>!isNaN(x));return v.length?Math.max(...v):5}
@@ -300,15 +494,15 @@ function dist(r,i,scale){
   return counts;
 }
 
-function hf(t,inp){
+function hf(type,inp){
   const f=inp.files[0];if(!f)return;
   const rd=new FileReader();
   rd.onload=e=>{
     const p=csv(e.target.result);
-    if(t==='pre')P=p;else Q=p;
-    document.getElementById(t==='pre'?'cp':'cq').classList.add('loaded');
-    document.getElementById(t==='pre'?'np':'nq').textContent=f.name;
-    document.getElementById(t==='pre'?'mp':'mq').textContent=p.rows.length+' respondenter · CSV';
+    if(type==='pre')P=p;else Q=p;
+    document.getElementById(type==='pre'?'cp':'cq').classList.add('loaded');
+    document.getElementById(type==='pre'?'np':'nq').textContent=f.name;
+    document.getElementById(type==='pre'?'mp':'mq').textContent=p.rows.length+' '+t('respondents');
     if(P&&Q)buildUI();
   };
   rd.readAsText(f);
@@ -334,14 +528,14 @@ function buildUI(){
 function addP(pi,qi){
   const d=document.createElement('div');d.className='mr';
   const p=pi!==undefined?pi+1:1,q=qi!==undefined?qi+1:1;
-  d.innerHTML=`<select>${opts(P,p)}</select><div class="ai">→</div><select>${opts(Q,q)}</select><button class="del-btn" onclick="this.closest('.mr').remove()" title="Fjern">×</button>`;
+  d.innerHTML=`<select>${opts(P,p)}</select><div class="ai">→</div><select>${opts(Q,q)}</select><button class="del-btn" onclick="this.closest('.mr').remove()" title="${t('fjern')}">×</button>`;
   document.getElementById('pr').appendChild(d);
 }
 
 function addPG(qi){
   const d=document.createElement('div');d.className='mpr';
   const q=qi!==undefined?qi+1:1;
-  d.innerHTML=`<span class="pbl">Program</span><select style="flex:1">${opts(Q,q)}</select><button class="del-btn" onclick="this.closest('.mpr').remove()" title="Fjern">×</button>`;
+  d.innerHTML=`<span class="pbl">${t('program')}</span><select style="flex:1">${opts(Q,q)}</select><button class="del-btn" onclick="this.closest('.mpr').remove()" title="${t('fjern')}">×</button>`;
   document.getElementById('pgr').appendChild(d);
 }
 
@@ -378,22 +572,7 @@ function analyze(){
   const mp2=document.getElementById('mp2');mp2.textContent=(avgPct>=0?'+':'')+avgPct.toFixed(1)+'%';mp2.className='mv '+(avgPct>0?'pos':avgPct<0?'neg':'');
   document.getElementById('mi').textContent=imp+'/'+res.length;
 
-  // Set report name in dashboard
-  const dashTitle=document.getElementById('dashTitle');
-  const dashSubt=document.getElementById('dashSubt');
-  const topbarTitle=document.getElementById('topbarTitle');
-  if(reportName){
-    dashTitle.textContent=reportName;
-    dashSubt.textContent='Evalueringsresultater · Videocation';
-    dashSubt.style.display='block';
-    topbarTitle.textContent=reportName;
-    topbarTitle.style.display='block';
-  } else {
-    dashTitle.textContent='Resultater';
-    dashSubt.style.display='none';
-    topbarTitle.style.display='none';
-  }
-
+  updateDashStrings();
   dots(3);
   Object.values(distCharts).forEach(c=>{try{c.destroy()}catch(e){}});
   distCharts={};
@@ -412,8 +591,8 @@ function barChart(res){
     data:{
       labels:res.map((_,i)=>'S'+(i+1)),
       datasets:[
-        {label:'Før',data:res.map(r=>+r.pre.toFixed(2)),backgroundColor:'#FFF5B8',borderRadius:4,barPercentage:.55},
-        {label:'Etter',data:res.map(r=>+r.post.toFixed(2)),backgroundColor:'#FFE880',borderRadius:4,barPercentage:.55}
+        {label:t('liPre'),data:res.map(r=>+r.pre.toFixed(2)),backgroundColor:'#FFF5B8',borderRadius:4,barPercentage:.55},
+        {label:t('liPost'),data:res.map(r=>+r.post.toFixed(2)),backgroundColor:'#FFE880',borderRadius:4,barPercentage:.55}
       ]
     },
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11,weight:'600'},autoSkip:false},grid:{display:false}},y:{max:5,ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}}
@@ -431,12 +610,12 @@ function renderDist(idx,type){
     const preVals=labels.map(l=>r.distPre[+l]||0);
     const postVals=labels.map(l=>r.distPost[+l]||0);
     datasets=[
-      {label:'Før',data:preVals,backgroundColor:'#FFF5B8',borderRadius:3,barPercentage:.7},
-      {label:'Etter',data:postVals,backgroundColor:'#FFE880',borderRadius:3,barPercentage:.7}
+      {label:t('liPre'),data:preVals,backgroundColor:'#FFF5B8',borderRadius:3,barPercentage:.7},
+      {label:t('liPost'),data:postVals,backgroundColor:'#FFE880',borderRadius:3,barPercentage:.7}
     ];
   } else {
     const vals=labels.map(l=>r.dist[+l]||0);
-    datasets=[{label:'Antall',data:vals,backgroundColor:'#FFE880',borderRadius:3,barPercentage:.6}];
+    datasets=[{label:t('liAvg'),data:vals,backgroundColor:'#FFE880',borderRadius:3,barPercentage:.6}];
   }
   const canvas=document.getElementById(cid);
   distCharts[cid]=new Chart(canvas,{
@@ -447,8 +626,8 @@ function renderDist(idx,type){
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{
-          title:ctx=>'Skalaverdi '+ctx[0].label,
-          label:ctx=>' '+ctx.raw+' svar'
+          title:ctx=>t('scaleVal')+' '+ctx[0].label,
+          label:ctx=>' '+ctx.raw+' '+t('answers')
         }}
       },
       scales:{
@@ -470,8 +649,8 @@ function qList(res){
       <div class="qi-main">
         <div class="qt"><span class="qn">S${i+1}</span><span class="qtx">${r.label}</span></div>
         <div class="qs">
-          <span class="sb pre">Før: ${r.pre.toFixed(2)}</span>
-          <span class="sb post">Etter: ${r.post.toFixed(2)}</span>
+          <span class="sb pre">${t('liPre')}: ${r.pre.toFixed(2)}</span>
+          <span class="sb post">${t('liPost')}: ${r.post.toFixed(2)}</span>
           <span class="cc2 ${cl}">${cs}</span>
         </div>
         <div class="qb"><div class="qbpre" style="width:${pw}%"></div><div class="qbpost" style="width:${qw}%"></div></div>
@@ -491,7 +670,7 @@ function progSec(pgr){
   pgr.forEach((p,i)=>{
     const bw=(p.avg/p.scale*100).toFixed(1);
     const d=document.createElement('div');d.className='pt';
-    d.innerHTML=`<div class="ptq">${p.label}</div><div class="ptv">${p.avg.toFixed(2)}</div><div class="pts">snitt · skala 1–${p.scale}</div><div class="ptb"><div class="ptbf" style="width:${bw}%"></div></div>`;
+    d.innerHTML=`<div class="ptq">${p.label}</div><div class="ptv">${p.avg.toFixed(2)}</div><div class="pts">${t('avgLabel')} 1–${p.scale}</div><div class="ptb"><div class="ptbf" style="width:${bw}%"></div></div>`;
     sm.appendChild(d);
   });
   if(pI)pI.destroy();
@@ -499,7 +678,7 @@ function progSec(pgr){
   document.getElementById('pcw').style.height=h+'px';
   pI=new Chart(document.getElementById('pc'),{
     type:'bar',
-    data:{labels:pgr.map((_,i)=>'P'+(i+1)),datasets:[{label:'Snitt',data:pgr.map(p=>+p.avg.toFixed(2)),backgroundColor:'#FFE880',borderRadius:4,barPercentage:.5}]},
+    data:{labels:pgr.map((_,i)=>'P'+(i+1)),datasets:[{label:t('liAvg'),data:pgr.map(p=>+p.avg.toFixed(2)),backgroundColor:'#FFE880',borderRadius:4,barPercentage:.5}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11,weight:'600'},autoSkip:false},grid:{display:false}},y:{min:0,max:5,ticks:{color:'#ABABAB',font:{family:'Montserrat',size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}}
   });
   const pl=document.getElementById('pgl');pl.innerHTML='';
@@ -509,7 +688,7 @@ function progSec(pgr){
     d.innerHTML=`
       <div class="qi-main">
         <div class="qt"><span class="qn prog">P${i+1}</span><span class="qtx">${p.label}</span></div>
-        <div class="qs"><span class="sb po">Snitt: ${p.avg.toFixed(2)} / ${p.scale}</span></div>
+        <div class="qs"><span class="sb po">${t('liAvg')}: ${p.avg.toFixed(2)} / ${p.scale}</span></div>
         <div class="qb"><div class="qbprog" style="width:${bw}%"></div></div>
       </div>
       <div class="dist-panel">
@@ -526,11 +705,11 @@ function reset(){
   if(pI){pI.destroy();pI=null}
   Object.values(distCharts).forEach(c=>{try{c.destroy()}catch(e){}});
   distCharts={};fullResults=[];fullProgResults=[];
-  ['pre','post'].forEach(t=>{
-    document.getElementById(t==='pre'?'cp':'cq').classList.remove('loaded');
-    document.getElementById(t==='pre'?'np':'nq').textContent='Velg CSV-fil';
-    document.getElementById(t==='pre'?'mp':'mq').textContent='Klikk for å laste opp';
-    document.getElementById(t==='pre'?'fp':'fq').value='';
+  ['pre','post'].forEach(type=>{
+    document.getElementById(type==='pre'?'cp':'cq').classList.remove('loaded');
+    document.getElementById(type==='pre'?'np':'nq').textContent=t('pickCsv');
+    document.getElementById(type==='pre'?'mp':'mq').textContent=t('clickUpload');
+    document.getElementById(type==='pre'?'fp':'fq').value='';
   });
   document.getElementById('rname').value='';
   document.getElementById('mui').style.display='none';
@@ -596,10 +775,10 @@ function demo(){
 "2025/09/22 9:35:30 a.m. CET","4","5","5","3","4","4","4","3","4"
 "2025/09/22 9:35:38 a.m. CET","3","2","5","5","4","5","5","4","4"`;
   P=csv(pc);Q=csv(qc);
-  ['pre','post'].forEach(t=>{
-    document.getElementById(t==='pre'?'cp':'cq').classList.add('loaded');
-    document.getElementById(t==='pre'?'np':'nq').textContent=t==='pre'?'Før-måling_Kræsjkurs_i_AI.csv':'Etter-måling_Kræsjkurs_i_AI.csv';
-    document.getElementById(t==='pre'?'mp':'mq').textContent=(t==='pre'?'28':'18')+' respondenter · CSV';
+  ['pre','post'].forEach(type=>{
+    document.getElementById(type==='pre'?'cp':'cq').classList.add('loaded');
+    document.getElementById(type==='pre'?'np':'nq').textContent=type==='pre'?'Før-måling_Kræsjkurs_i_AI.csv':'Etter-måling_Kræsjkurs_i_AI.csv';
+    document.getElementById(type==='pre'?'mp':'mq').textContent=(type==='pre'?'28':'18')+' '+t('respondents');
   });
   buildUI();analyze();
 }
@@ -613,7 +792,7 @@ async function exportPDF(){
   btn.classList.add('loading');
   overlay.classList.add('show');
   bar.style.width='0%';
-  lbl.textContent='Forbereder innhold…';
+  lbl.textContent=t('pdfPreparing');
 
   await new Promise(r=>setTimeout(r,200));
 
@@ -640,40 +819,40 @@ async function exportPDF(){
   }
 
   try{
-    prog(10,'Lager header…');
+    prog(10,t('pdfHeader'));
     const y={y:margin};
 
-    // Header
     pdf.setFillColor(77,69,84);
     pdf.roundedRect(margin,y.y,contentW,reportName?22:18,3,3,'F');
     pdf.setFont('helvetica','bold');
     pdf.setFontSize(11);
     pdf.setTextColor(255,255,255);
-    pdf.text(reportName||'Evalueringsrapport',margin+6,y.y+(reportName?8:7.5));
+    pdf.text(reportName||t('pdfEvalReport'),margin+6,y.y+(reportName?8:7.5));
     pdf.setFont('helvetica','normal');
     pdf.setFontSize(8);
     pdf.setTextColor(200,195,210);
     const now=new Date();
-    const dateStr='Videocation · Eksportert '+now.toLocaleDateString('nb-NO',{day:'2-digit',month:'long',year:'numeric'});
-    pdf.text(reportName?'Evalueringsresultater · '+dateStr:dateStr,margin+6,y.y+(reportName?15:13));
+    const locale=lang==='en'?'en-GB':'nb-NO';
+    const dateStr='Videocation · '+t('pdfExported')+' '+now.toLocaleDateString(locale,{day:'2-digit',month:'long',year:'numeric'});
+    pdf.text(reportName?t('pdfEvalResults')+' · '+dateStr:dateStr,margin+6,y.y+(reportName?15:13));
     y.y+=(reportName?28:24);
 
-    prog(20,'Henter nøkkeltall…');
+    prog(20,t('pdfMetrics'));
     const mrow=document.querySelector('.mrow');
     if(mrow)await addEl(mrow,y,{scale:2});
 
-    prog(35,'Henter søylediagram…');
+    prog(35,t('pdfChart'));
     const bcCard=document.querySelector('#bcw')?.closest('.cc');
     if(bcCard)await addEl(bcCard,y,{scale:2});
 
-    prog(55,'Henter spørsmålskort…');
+    prog(55,t('pdfQuestions'));
     const qItems=document.querySelectorAll('#ql .qi');
     for(let i=0;i<qItems.length;i++){
       await addEl(qItems[i],y,{scale:2});
-      prog(55+Math.round((i+1)/qItems.length*20),'Spørsmål '+(i+1)+' av '+qItems.length+'…');
+      prog(55+Math.round((i+1)/qItems.length*20),t('pdfSpørsmål')+' '+(i+1)+' '+t('pdfQOf')+' '+qItems.length+'…');
     }
 
-    prog(78,'Sjekker programvurdering…');
+    prog(78,t('pdfProgCheck'));
     const pgs=document.getElementById('pgs');
     if(pgs&&pgs.style.display!=='none'){
       if(y.y+6>pageH-margin){pdf.addPage();y.y=margin;}
@@ -683,7 +862,7 @@ async function exportPDF(){
       pdf.setFont('helvetica','bold');
       pdf.setFontSize(8);
       pdf.setTextColor(77,69,84);
-      pdf.text('PROGRAMVURDERING',pageW/2,y.y+3,{align:'center',baseline:'middle'});
+      pdf.text(t('pdfProgSection'),pageW/2,y.y+3,{align:'center',baseline:'middle'});
       y.y+=10;
       const pgsum=document.getElementById('pgsum');
       if(pgsum)await addEl(pgsum,y,{scale:2});
@@ -692,25 +871,28 @@ async function exportPDF(){
       const pgItems=document.querySelectorAll('#pgl .qi');
       for(let i=0;i<pgItems.length;i++){
         await addEl(pgItems[i],y,{scale:2});
-        prog(80+Math.round((i+1)/pgItems.length*15),'Programspørsmål '+(i+1)+'…');
+        prog(80+Math.round((i+1)/pgItems.length*15),t('pdfProgQ')+' '+(i+1)+'…');
       }
     }
 
-    prog(97,'Lagrer fil…');
-    const slug=(reportName?reportName.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,''):'evalueringsrapport');
+    prog(97,t('pdfSaving'));
+    const slug=(reportName?reportName.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,''):'evaluation-report');
     pdf.save(slug+'_'+now.toISOString().slice(0,10)+'.pdf');
-    prog(100,'Ferdig!');
+    prog(100,t('pdfDone'));
     await new Promise(r=>setTimeout(r,600));
 
   } catch(err){
-    console.error('PDF-feil:',err);
-    lbl.textContent='Noe gikk galt. Prøv igjen.';
+    console.error('PDF error:',err);
+    lbl.textContent=t('pdfError');
     await new Promise(r=>setTimeout(r,1500));
   }
 
   overlay.classList.remove('show');
   btn.classList.remove('loading');
 }
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+applyStrings();
 </script>
 </body>
 </html>
