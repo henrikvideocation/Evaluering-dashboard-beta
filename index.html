@@ -445,7 +445,7 @@ function renderDist(idx,type){
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
-        legend:{display:type==='comp',position:'top',labels:{boxWidth:9,font:{family:'Montserrat',size:10},color:'#7A7A7A'}},
+        legend:{display:false},
         tooltip:{callbacks:{
           title:ctx=>'Skalaverdi '+ctx[0].label,
           label:ctx=>' '+ctx.raw+' svar'
